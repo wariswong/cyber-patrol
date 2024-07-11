@@ -5,20 +5,20 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 
 export default function Home() {
-  const [unitTotal, setUnitTotal] = useState(0);
-  const [unitNow, setUnitNow] = useState(0);
-  const [V, setV] = useState(0);
-  const [I, setI] = useState(0);
-  const [PF, setPF] = useState(0);
-  const [readDate, setReadDate] = useState('');
-  const [customLF, setCustomLF] = useState(0);
+  const [unitTotal, setUnitTotal] = useState('');
+  const [unitNow, setUnitNow] = useState('');
+  const [V, setV] = useState('220');
+  const [I, setI] = useState('');
+  const [PF, setPF] = useState('');
+  const [readDate, setReadDate] = useState(new Date().toISOString().split('T')[0]);
+  const [customLF, setCustomLF] = useState('');
   const [results, setResults] = useState([]);
   const [customResult, setCustomResult] = useState(null);
 
   const handleCalculate = () => {
     const readDateObj = new Date(readDate);
     const currentDate = new Date();
-    const daysDifference = (currentDate - readDateObj) / (1000 * 3600 * 24);
+    const daysDifference = Math.floor((currentDate - readDateObj) / (1000 * 3600 * 24)); // Calculate difference in days
 
     const newResults = [];
     for (let LF = 0.1; LF <= 1.0; LF += 0.1) {
@@ -35,9 +35,20 @@ export default function Home() {
     }
   };
 
+  // Function to calculate default value for unitNow
+  const calculateDefaultUnitNow = () => {
+    if (!readDate) return ''; // Return empty string if readDate is not set
+
+    const readDateObj = new Date(readDate);
+    const currentDate = new Date();
+    const daysDifference = Math.floor((currentDate - readDateObj) / (1000 * 3600 * 24)); // Calculate difference in days
+
+    return daysDifference.toString(); // Return days difference as string
+  };
+
   return (
     <Container>
-      <h1 className="my-5">Cyber-Patrol</h1>
+      <h1 className="my-5">Calculation Page</h1>
       <Form>
         <Row>
           <Col md={6}>
@@ -47,7 +58,7 @@ export default function Home() {
                 type="number"
                 step="0.01"
                 value={unitTotal}
-                onChange={(e) => setUnitTotal(parseFloat(e.target.value))}
+                onChange={(e) => setUnitTotal(e.target.value)}
               />
             </Form.Group>
           </Col>
@@ -58,7 +69,8 @@ export default function Home() {
                 type="number"
                 step="0.01"
                 value={unitNow}
-                onChange={(e) => setUnitNow(parseFloat(e.target.value))}
+                onChange={(e) => setUnitNow(e.target.value)}
+                defaultValue={calculateDefaultUnitNow()} // Set default value using calculateDefaultUnitNow function
               />
             </Form.Group>
           </Col>
@@ -71,7 +83,7 @@ export default function Home() {
                 type="number"
                 step="0.01"
                 value={V}
-                onChange={(e) => setV(parseFloat(e.target.value))}
+                onChange={(e) => setV(e.target.value)}
               />
             </Form.Group>
           </Col>
@@ -82,7 +94,7 @@ export default function Home() {
                 type="number"
                 step="0.01"
                 value={I}
-                onChange={(e) => setI(parseFloat(e.target.value))}
+                onChange={(e) => setI(e.target.value)}
               />
             </Form.Group>
           </Col>
@@ -95,7 +107,7 @@ export default function Home() {
                 type="number"
                 step="0.01"
                 value={PF}
-                onChange={(e) => setPF(parseFloat(e.target.value))}
+                onChange={(e) => setPF(e.target.value)}
               />
             </Form.Group>
           </Col>
@@ -106,6 +118,7 @@ export default function Home() {
                 type="date"
                 value={readDate}
                 onChange={(e) => setReadDate(e.target.value)}
+                max={new Date().toISOString().split('T')[0]} // Set max date to today's date
               />
             </Form.Group>
           </Col>
@@ -118,7 +131,7 @@ export default function Home() {
                 type="number"
                 step="0.01"
                 value={customLF}
-                onChange={(e) => setCustomLF(parseFloat(e.target.value))}
+                onChange={(e) => setCustomLF(e.target.value)}
               />
             </Form.Group>
           </Col>
@@ -136,19 +149,18 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {customResult && (
-              <tr>
-                <td>{customResult.LF}</td>
-                <td>{customResult.result}</td>
-              </tr>
-            )}
             {results.map((result, index) => (
               <tr key={index}>
                 <td>{result.LF}</td>
                 <td>{result.result}</td>
               </tr>
             ))}
-            
+            {customResult && (
+              <tr>
+                <td>{customResult.LF}</td>
+                <td>{customResult.result}</td>
+              </tr>
+            )}
           </tbody>
         </Table>
       )}
