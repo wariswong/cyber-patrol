@@ -7,18 +7,22 @@ import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 export default function Home() {
   const [unitTotal, setUnitTotal] = useState('');
   const [unitNow, setUnitNow] = useState('');
-  const [V, setV] = useState('220');
+  const [V, setV] = useState('');
   const [I, setI] = useState('');
   const [PF, setPF] = useState('');
   const [readDate, setReadDate] = useState(new Date().toISOString().split('T')[0]);
   const [customLF, setCustomLF] = useState('');
   const [results, setResults] = useState([]);
   const [customResult, setCustomResult] = useState(null);
+  const [pMeters, setPmeter] = useState('');
+  const [pCalculaters, setPcalculaters] = useState('');
+  // const [PercentError, setPercentError] = useState('');
 
   const handleCalculate = () => {
     const readDateObj = new Date(readDate);
     const currentDate = new Date();
     const daysDifference = Math.floor((currentDate - readDateObj) / (1000 * 3600 * 24)); // Calculate difference in days
+    setPcalculaters((V * I * PF) / 1000);
 
     const newResults = [];
     for (let LF = 0.1; LF <= 1.0; LF += 0.1) {
@@ -33,7 +37,13 @@ export default function Home() {
     } else {
       setCustomResult(null);
     }
+
+    
   };
+
+  const percentError = pMeters && pCalculaters ? ((parseFloat(pMeters) - parseFloat(pCalculaters)) / parseFloat(pCalculaters)).toFixed(2) : '';
+  const unitDifference = unitNow && unitTotal ? parseFloat(unitNow) - parseFloat(unitTotal) : '';
+  
 
   // Function to calculate default value for unitNow
   const calculateDefaultUnitNow = () => {
@@ -48,7 +58,7 @@ export default function Home() {
 
   return (
     <Container>
-      <h1 className="my-5">Calculation Page</h1>
+      <h1 className="my-5">Cyber-Patrol</h1>
       <Form>
         <Row>
           <Col md={6}>
@@ -135,11 +145,44 @@ export default function Home() {
               />
             </Form.Group>
           </Col>
+          <Col md={6}>
+            <Form.Group controlId="pMeter">
+              <Form.Label>P Meter (kW)</Form.Label> 
+              <Form.Control
+                type="number"
+                step="0.01"
+                value={pMeters}
+                onChange={(e) => setPmeter(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
         </Row>
         <Button className="mt-3" onClick={handleCalculate}>
           Calculate
         </Button>
       </Form>
+      <Row>
+        <Col md={6}>
+          <Form.Group controlId="unitDifference">
+            <Form.Label>หน่วยสะสม (หน่วยปัจจุบัน - หน่วยสะสม ครั้งก่อน)</Form.Label>
+            <Form.Control
+              type="text"
+              readOnly
+              value={unitDifference}
+            />
+          </Form.Group>
+        </Col>
+        <Col md={6}>
+          <Form.Group controlId="percentError">
+            <Form.Label>% Error</Form.Label>
+            <Form.Control
+              type="text"
+              readOnly
+              value={percentError}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
       {results.length > 0 && (
         <Table striped bordered hover className="mt-5">
           <thead>
@@ -149,18 +192,19 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {results.map((result, index) => (
-              <tr key={index}>
-                <td>{result.LF}</td>
-                <td>{result.result}</td>
-              </tr>
-            ))}
             {customResult && (
               <tr>
                 <td>{customResult.LF}</td>
                 <td>{customResult.result}</td>
               </tr>
             )}
+            {results.map((result, index) => (
+              <tr key={index}>
+                <td>{result.LF}</td>
+                <td>{result.result}</td>
+              </tr>
+            ))}
+            
           </tbody>
         </Table>
       )}
