@@ -41,7 +41,7 @@ export default function Home() {
         result = LF * (V * I * PF) / 1000 * 24 * daysDifference;
         setPcalculaters((V * I * PF) / 1000);
       } else if (key === 'threePhase') {
-        const totalPower = (V1 * I1 * PF1 + V2 * I2 * PF2 + V3 * I3 * PF3) * Math.sqrt(3) / 1000;
+        const totalPower = ((V1 * I1 * PF1) + (V2 * I2 * PF2) + (V3 * I3 * PF3)) / 1000;
         result = LF * totalPower * 24 * daysDifference;
         setPcalculaters(totalPower);
       }
@@ -54,7 +54,7 @@ export default function Home() {
       if (key === 'singlePhase') {
         customResult = customLF * (V * I * PF) / 1000 * 24 * daysDifference;
       } else if (key === 'threePhase') {
-        const totalPower = (V1 * I1 * PF1 + V2 * I2 * PF2 + V3 * I3 * PF3) * Math.sqrt(3) / 1000;
+        const totalPower = ((V1 * I1 * PF1) + (V2 * I2 * PF2) + (V3 * I3 * PF3)) / 1000;
         customResult = customLF * totalPower * 24 * daysDifference;
       }
       setCustomResult({ LF: customLF, result: customResult.toFixed(2) });
@@ -176,7 +176,7 @@ export default function Home() {
         <Tab eventKey="threePhase" title="Three Phase">
           <Form>
             <Row>
-              <Col md={6}>
+              <Col md={4}>
                 <Form.Group controlId="unitTotal">
                   <Form.Label>หน่วยสะสม (จดหน่วยครั้งก่อน)</Form.Label>
                   <Form.Control
@@ -187,7 +187,7 @@ export default function Home() {
                   />
                 </Form.Group>
               </Col>
-              <Col md={6}>
+              <Col md={4}>
                 <Form.Group controlId="unitNow">
                   <Form.Label>หน่วยสะสม (หน่วยปัจจุบัน)</Form.Label>
                   <Form.Control
@@ -195,6 +195,17 @@ export default function Home() {
                     step="0.01"
                     value={unitNow}
                     onChange={(e) => setUnitNow(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={4}>
+                <Form.Group controlId="readDate">
+                  <Form.Label>วันที่จดหน่วย</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={readDate}
+                    onChange={(e) => setReadDate(e.target.value)}
+                    max={new Date().toISOString().split('T')[0]} // Set max date to today's date
                   />
                 </Form.Group>
               </Col>
