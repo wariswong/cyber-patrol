@@ -137,7 +137,7 @@ export default function Home() {
             <Row>
               <Col md={6}>
                 <Form.Group controlId="readDate">
-                  <Form.Label>วันที่จดหน่วย</Form.Label>
+                  <Form.Label>วันที่จดหน่วยล่าสุด</Form.Label>
                   <Form.Control
                     type="date"
                     value={readDate}
@@ -148,7 +148,7 @@ export default function Home() {
               </Col>
               <Col md={6}>
                 <Form.Group controlId="endDate">
-                  <Form.Label>วันที่สิ้นสุด</Form.Label>
+                  <Form.Label>วันที่ตรวจมิเตอร์</Form.Label>
                   <Form.Control
                     type="date"
                     value={endDate}
@@ -216,7 +216,7 @@ export default function Home() {
             <Row>
               <Col md={4}>
                 <Form.Group controlId="readDate">
-                  <Form.Label>วันที่จดหน่วย</Form.Label>
+                  <Form.Label>วันที่จดหน่วยล่าสุด</Form.Label>
                   <Form.Control
                     type="date"
                     value={readDate}
@@ -227,7 +227,7 @@ export default function Home() {
               </Col>
               <Col md={4}>
                 <Form.Group controlId="endDate">
-                  <Form.Label>วันที่สิ้นสุด</Form.Label>
+                  <Form.Label>วันที่ตรวจมิเตอร์</Form.Label>
                   <Form.Control
                     type="date"
                     value={endDate}
