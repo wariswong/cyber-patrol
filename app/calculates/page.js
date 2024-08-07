@@ -11,6 +11,7 @@ export default function Home() {
   const [I, setI] = useState('');
   const [PF, setPF] = useState('');
   const [readDate, setReadDate] = useState(new Date().toISOString().split('T')[0]);
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
   const [customLF, setCustomLF] = useState('');
   const [results, setResults] = useState([]);
   const [customResult, setCustomResult] = useState(null);
@@ -31,7 +32,7 @@ export default function Home() {
 
   const handleCalculate = () => {
     const readDateObj = new Date(readDate);
-    const currentDate = new Date();
+    const currentDate = new Date(endDate);
     const daysDifference = Math.floor((currentDate - readDateObj) / (1000 * 3600 * 24)); // Calculate difference in days
 
     const newResults = [];
@@ -131,7 +132,9 @@ export default function Home() {
                     onChange={(e) => setPF(e.target.value)}
                   />
                 </Form.Group>
-              </Col>
+              </Col>              
+            </Row>
+            <Row>
               <Col md={6}>
                 <Form.Group controlId="readDate">
                   <Form.Label>วันที่จดหน่วย</Form.Label>
@@ -139,6 +142,17 @@ export default function Home() {
                     type="date"
                     value={readDate}
                     onChange={(e) => setReadDate(e.target.value)}
+                    max={new Date().toISOString().split('T')[0]} // Set max date to today's date
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="endDate">
+                  <Form.Label>วันที่สิ้นสุด</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
                     max={new Date().toISOString().split('T')[0]} // Set max date to today's date
                   />
                 </Form.Group>
@@ -176,7 +190,7 @@ export default function Home() {
         <Tab eventKey="threePhase" title="Three Phase">
           <Form>
             <Row>
-              <Col md={4}>
+              <Col md={6}>
                 <Form.Group controlId="unitTotal">
                   <Form.Label>หน่วยสะสม (จดหน่วยครั้งก่อน)</Form.Label>
                   <Form.Control
@@ -187,7 +201,7 @@ export default function Home() {
                   />
                 </Form.Group>
               </Col>
-              <Col md={4}>
+              <Col md={6}>
                 <Form.Group controlId="unitNow">
                   <Form.Label>หน่วยสะสม (หน่วยปัจจุบัน)</Form.Label>
                   <Form.Control
@@ -197,7 +211,9 @@ export default function Home() {
                     onChange={(e) => setUnitNow(e.target.value)}
                   />
                 </Form.Group>
-              </Col>
+              </Col>              
+            </Row>
+            <Row>
               <Col md={4}>
                 <Form.Group controlId="readDate">
                   <Form.Label>วันที่จดหน่วย</Form.Label>
@@ -205,6 +221,17 @@ export default function Home() {
                     type="date"
                     value={readDate}
                     onChange={(e) => setReadDate(e.target.value)}
+                    max={new Date().toISOString().split('T')[0]} // Set max date to today's date
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={4}>
+                <Form.Group controlId="endDate">
+                  <Form.Label>วันที่สิ้นสุด</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
                     max={new Date().toISOString().split('T')[0]} // Set max date to today's date
                   />
                 </Form.Group>
